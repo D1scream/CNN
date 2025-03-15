@@ -6,31 +6,30 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 from tensorflow.keras.callbacks import EarlyStopping, ModelCheckpoint, ReduceLROnPlateau , CSVLogger
 from init import preprocess_data
-from train import build_model, train_model, save_model, plot_history
+from train import build_model, build_model_sholle, train_model, plot_history
 from tensorflow.keras.models import load_model
 
 tf.config.threading.set_intra_op_parallelism_threads(3)
 tf.config.threading.set_inter_op_parallelism_threads(3)
 
-#preprocess_data()
 
-#test_datagen = ImageDataGenerator(rescale=1. / 255)
 
-#test_generator = test_datagen.flow_from_directory('working/test', target_size=(128, 128), classes=['Cats', 'Dogs'], class_mode='binary', batch_size=32)
+model_path = "working/models/SholleModel.keras"
 
-#model = build_model()
-#history = train_model(model, callbacks, epochs=5)
-#save_model(model, 'working/models/model50epochs.keras')
-#plot_history(history)
-'''
-callbacks = [
-    ReduceLROnPlateau(monitor='val_accuracy', patience=4, verbose=1, factor=0.75, min_lr=0.00001),
-    EarlyStopping(patience=10),
-    ModelCheckpoint(filepath='working/models/model_best_acc.keras', monitor='val_accuracy', save_best_only=True, save_freq='epoch'),
-    CSVLogger('log.csv', separator=",", append=True)
-]
-'''
-model_path = 'working/models/model50epochs.keras'
+# preprocess_data()
+# callbacks = [
+#     ReduceLROnPlateau(monitor='val_accuracy', patience=4, verbose=1, factor=0.75, min_lr=0.00001),
+#     EarlyStopping(patience=10),
+#     ModelCheckpoint(filepath='working/models/model_best_acc.keras', monitor='val_accuracy', save_best_only=True, save_freq='epoch'),
+#     CSVLogger('log.csv', separator=",", append=True)
+# ]
+
+# model = build_model_sholle()
+# history = train_model(model, callbacks, epochs=10)
+
+# model.save(model_path)
+# plot_history(history)
+
 model = load_model(model_path)
 
 def predict(img_path):
@@ -48,4 +47,11 @@ def predict(img_path):
     plt.title(f"Предсказание: {label}. Probability {max(probability,1-probability):.2f}")
     plt.show()
 
-predict('AnimeCat.jpg')
+predict('cat3.jpg')
+predict('dog2.jpg')
+predict('GermanDog.jpg')
+predict('somecat2.jpg')
+predict('SnowCat.jpg')
+predict('animedog.jpg')
+predict('animecat.jpg')
+predict('den.jpg')

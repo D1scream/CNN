@@ -98,14 +98,19 @@ def preprocess_data():
 
     reset_directory(test_path + "/cats")
     split_data_to_dir("Cats", clean_dataset_path, test_path, test_samples)
+    
     reset_directory(train_path + "/cats")
     split_data_to_dir("Cats", clean_dataset_path, train_path, train_samples)
+    
     reset_directory(validation_path + "/cats")
     split_data_to_dir("Cats", clean_dataset_path, validation_path, validation_samples)
 
+
     reset_directory(test_path + "/dogs")
     split_data_to_dir("Dogs", clean_dataset_path, test_path, test_samples)
+    
     reset_directory(train_path + "/dogs")
     split_data_to_dir("Dogs", clean_dataset_path, train_path, train_samples)
+    
     reset_directory(validation_path + "/dogs")
     split_data_to_dir("Dogs", clean_dataset_path, validation_path, validation_samples)

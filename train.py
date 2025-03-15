@@ -1,6 +1,7 @@
 import os
 import random
-import time
+from tensorflow import keras
+from tensorflow.keras import layers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Conv2D, MaxPooling2D, BatchNormalization, Dropout, Dense, Flatten
 from tensorflow.keras.preprocessing.image import ImageDataGenerator
@@ -16,11 +17,32 @@ def display_imgs_from_path(path='', rows = 1, cols = 1):
         plt.axis('off')
         plt.title(img_name[:8])
 
-# Set image dimensions and batch size
 WIDTH = 128
 HEIGHT = 128
 IMG_SIZE = (WIDTH, HEIGHT)
 BATCH = 32
+
+def build_model_sholle():
+    model = keras.Sequential([
+        layers.Conv2D(32, (3, 3), activation="relu", input_shape=(WIDTH, HEIGHT, 3)),
+        layers.MaxPooling2D((2, 2)),
+
+        layers.Conv2D(64, (3, 3), activation="relu"),
+        layers.MaxPooling2D((2, 2)),
+
+        layers.Conv2D(128, (3, 3), activation="relu"),
+        layers.MaxPooling2D((2, 2)),
+
+        layers.Conv2D(128, (3, 3), activation="relu"),
+        layers.MaxPooling2D((2, 2)),
+
+        layers.Flatten(),
+        layers.Dense(512, activation="relu"),
+        layers.Dense(1, activation="sigmoid") 
+    ])
+
+    model.compile(loss="binary_crossentropy", optimizer="adam", metrics=["accuracy"])
+    return model
 
 def build_model():
     model = Sequential()
@@ -71,23 +93,18 @@ def train_model(model, callbacks, epochs = 1):
                                                                 class_mode='binary', 
                                                                 batch_size=32)
 
-    EPOCHS = epochs
-    
+
     history = model.fit(
         train_generator,
         steps_per_epoch=train_generator.samples // BATCH,
-        epochs=EPOCHS,
+        epochs=epochs,
         validation_data=validation_generator,
         validation_steps=validation_generator.samples // BATCH,
         callbacks=callbacks
     )
     
     print(f"Training done")
-
     return history
-
-def save_model(model, model_path):
-    model.save(model_path)
 
 def plot_history(history):
     plt.plot(history.history['accuracy'])
@@ -104,11 +121,4 @@ def plot_history(history):
     plt.xlabel('Epoch')
     plt.ylabel('Loss')
     plt.legend(['Train', 'Validation'], loc='upper left')
-    plt.show()
-
-    plt.plot(history.history['lr'])
-    plt.title('Learning Rate')
-    plt.xlabel('Epoch')
-    plt.ylabel('Learning Rate')
-    plt.legend(['Learning Rate'], loc='upper left')
     plt.show()
